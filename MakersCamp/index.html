@@ -1,0 +1,80 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+      <script src="/socket.io/socket.io.js"></script>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div id="body">
+            <div id="header">
+                <h1>SecurePot</h1>
+            </div>
+            <div id="content">
+                <h2>Interface administrateur</h2>
+                <p>Ce pannel d'administration vous permet d'accéder aux fonctionnalités de votre système de vidéo-surveillance en direct.</p>
+                <div id="video">  
+                    <img id="img" alt="Embedded Image" src="" />
+                </div>
+                <div id="buttons">
+                    <button id='onoff'>Allumer/éteindre la caméra</button>
+                    <button id='take-picture'>Prendre une photo</button>
+                    <button id='photo'><a href="panel">Accéder au panel</a></button>
+                </div>
+            </div>
+            <div id="footer">
+            </div>
+        </div>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+        </script>
+			<script type="text/javascript">
+			var socket = io();
+			socket.on('r' , function(data){
+				console.log(data);
+					if (data){
+						console.log("off")
+						socket.emit('off');
+					} else {
+						console.log("on")
+						socket.emit('on');
+					}
+				});
+			socket.on('img', function(data){
+				  $('#img').attr("src","data:image/jpeg;base64," + data.toString('base64'));
+				});
+			$('#onoff').click(function(){
+				console.log('status demande send')
+				socket.emit('status');
+			});
+			$('#take-picture').click(function(){
+				socket.emit('tphoto');
+			})
+			</script>
+    </body>
+</html>

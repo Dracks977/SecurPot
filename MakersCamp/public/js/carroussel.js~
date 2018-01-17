@@ -1,0 +1,23 @@
+var socket = io();
+var i = 0;
+
+$( document ).ready(function() {
+     socket.on('img', function(data) {
+	 $("#carroussel")
+	     .append("<div id='img-"+i+"' class='carroussel-element'><img src=data:image/jpeg;base64," + data.toString('base64') + "/></div>");
+		
+	 
+	 if ($(".carroussel-element").size() == 21)
+	     $(".carroussel-element").eq(0).remove();
+	 i++;
+
+	 $('.carroussel-element').off("click").on("click", function() {
+	     $("#test").empty();
+	     $(this).clone().appendTo('#test')
+	 })
+     })  
+
+     $('#test').click(function() {
+	 $(this).empty()
+     });
+ })
